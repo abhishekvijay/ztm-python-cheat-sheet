@@ -1,7 +1,7 @@
 Python ZTM Cheatsheet 💻🚀
 ===============================
 
-We created this Python 3 Cheat Sheet initially for students of [Complete Python Developer in 2020: Zero to Mastery](https://academy.zerotomastery.io/p/complete-python-developer-zero-to-mastery) but we're now sharing it with any Python beginners to help them learn and remember common Python syntax and with intermediate and advanced Python developers as a handy reference. If you'd like to download a PDF version of this Python Cheat Sheet, you can get it [here](https://zerotomastery.io/courses/python/cheatsheet/?utm_source=github&utm_medium=ztm-python-cheat-sheet)!
+We created this Python 3 Cheat Sheet initially for students of [Complete Python Developer in 2022: Zero to Mastery](https://academy.zerotomastery.io/p/complete-python-developer-zero-to-mastery) but we're now sharing it with any Python beginners to help them learn and remember common Python syntax and with intermediate and advanced Python developers as a handy reference. If you'd like to download a PDF version of this Python Cheat Sheet, you can get it [here](https://zerotomastery.io/courses/python/cheatsheet/?utm_source=github&utm_medium=ztm-python-cheat-sheet)!
 
 Contents
 --------
@@ -57,7 +57,7 @@ pi = float(pi)
 
 Strings
 ----
-**strings in python as stored as sequences of letters in memory**
+**strings in python are stored as sequences of letters in memory**
 ```python
 type('Hellloooooo') # str
 
@@ -93,13 +93,14 @@ len('turtle') # 6
 'Help me'.replace('me', 'you')        # 'Help you' --> Replaces first with second param
 'Need to make fire'.startswith('Need')# True
 'and cook rice'.endswith('rice')      # True
-'bye bye'.index('e')                  # 2
 'still there?'.upper()                # STILL THERE?
 'HELLO?!'.lower()                     # hello?!
 'ok, I am done.'.capitalize()         # 'Ok, I am done.'
-'oh hi there'.find('i')               # 4 --> returns the starting index position of the first occurrence
 'oh hi there'.count('e')              # 2
-
+'bye bye'.index('e')                  # 2
+'oh hi there'.find('i')               # 4 --> returns the starting index position of the first occurrence
+'oh hi there'.find('a')               # -1
+'oh hi there'.index('a')              # Raises ValueError
 ```
 
 ```python
@@ -107,7 +108,7 @@ len('turtle') # 6
 name1 = 'Andrei'
 name2 = 'Sunny'
 print(f'Hello there {name1} and {name2}')       # Hello there Andrei and Sunny - Newer way to do things as of python 3.6
-print('Hello there {}, {}'.format(name1, name2))# Hello there Andrei and Sunny
+print('Hello there {} and {}'.format(name1, name2))# Hello there Andrei and Sunny
 print('Hello there %s and %s' %(name1, name2))  # Hello there Andrei and Sunny --> you can also use %d, %f, %r for integers, floats, string representations of objects respectively
 ```
 
@@ -183,7 +184,7 @@ new_basket2 = basket[:]
 [1,2,3].pop(1)   # 2 --> mutates original list
 [1,2,3].remove(2)# None --> [1,3] Removes first occurrence of item or raises ValueError.
 [1,2,3].clear()  # None --> mutates original list and removes all items: []
-del [1,2,3][0] # 
+del [1,2,3][0]   # None --> removes item on index 0 or raises IndexError
 ```
 
 ```python
@@ -192,6 +193,8 @@ del [1,2,3][0] #
 [1,2,5,3].sort(reverse=True) # None --> Mutates list to [5, 3, 2, 1]
 [1,2,5,3].reverse()      # None --> Mutates list to [3, 5, 2, 1]
 sorted([1,2,5,3])        # [1, 2, 3, 5] --> new list created
+my_list = [(4,1),(2,4),(2,5),(1,6),(8,9)]
+sorted(my_list,key=lambda x: int(x[0])) # [(1, 6), (2, 4), (2, 5), (4, 1), (8, 9)] --> sort the list by 1st (0th index) value of the tuple
 list(reversed([1,2,5,3]))# [3, 5, 2, 1] --> reversed() returns an iterator
 ```
 
@@ -419,6 +422,10 @@ for num in my_list2:
 
 for num in '123':
     print(num) # 1, 2, 3
+
+for idx,value in enumerate(my_list):
+    print(idx) # get the index of the item
+    print(value) # get the value
 
 for k,v in my_dict.items(): # Dictionary Unpacking
     print(k) # 'a', 'b', 'c'
@@ -724,6 +731,31 @@ Decorators
 def function_that_gets_passed_to_decorator():
     ...
 ```
+
+**Example Decorator: timing performance using a decorator.**
+* **The functools decorator `@functools.wraps` is used to maintain function naming and 
+documentation of the function within the decorator.**
+
+```python
+from time import time 
+import functools
+
+def performance(func):
+
+    @functools.wraps()
+    def wrapper(*args, **kwargs):
+        t1 = time()
+        result = func(*args, **kwargs)
+        t2 = time() 
+        print(f"Took: {t2 - t1} ms")
+        return result
+    return wrapper
+
+# calling a function with the decorator 
+@performance
+def long_time():
+    print(sum(i*i for i in range(10000)))
+``` 
 
 ### Debugger Example
 **Decorator that prints function's name every time it gets called.**
